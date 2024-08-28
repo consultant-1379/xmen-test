@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><model>
+<mo fdn="SubNetwork=ONRM_ROOT_MO_R,MeContext=TEST-ERBSNEW" mimName="ERBS_NODE_MODEL" lastModified="1323853821481">
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+</mo>
+<mo fdn="SubNetwork=ONRM_ROOT_MO_R,MeContext=TEST-ERBSNEW,ManagedElement=1,ENodeBFunction=1" mimName="ERBS_NODE_MODEL" lastModified="1322087635197">
+<attr name="eNBId">5</attr>
+<struct>
+<attr name="mcc">353</attr>
+<attr name="mcc">353</attr>
+<attr name="mcc">353</attr>
+</struct>
+</mo>
+</model>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+<!--Please Use the latest version of integration pom.xml or the one you want to reference to -->
+	<parent>
+		<groupId>com.ericsson.nms</groupId>
+		<artifactId>integration</artifactId>
+		<version>13.2.0.244</version>
+	</parent>
+	<groupId>com.ericsson.oss.services</groupId>
+	<artifactId>ENIQTopologyServiceModel</artifactId>
+	<version>1.0.9-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>[${project.artifactId}] JEE6 Project</name>
+  <modules>
+    <module>ENIQTopologyServiceModel-jar</module>
+    <module>ERICpibmodel_CXP9030858</module>
+    <module>ENIQTopologyServiceModel-model</module>
+  </modules>
+ <properties>
+  <version.service.framework>2.0.10</version.service.framework>
+		<version.ServiceFrameworkBundle>2.0.10</version.ServiceFrameworkBundle>
+		
+		<project.ear.defaultLibBundleDir>lib</project.ear.defaultLibBundleDir>
+		<project.ear.Dependencies>org.slf4j</project.ear.Dependencies>
+		<nexusUrl>https://arm1s11-eiffel004.eiffel.gic.ericsson.se:8443/nexus/</nexusUrl>
+		<jira.url>http://jira-oss.lmera.ericsson.se/browse/TORPIB</jira.url>
+		<project.documentation.url>https://arm1s11-eiffel004.eiffel.gic.ericsson.se:8443/nexus/content/sites/tor/PlatformIntegrationBridge</project.documentation.url>
+		
+		
+		<version.ModelingServiceBOM>1.0.25</version.ModelingServiceBOM>
+		<version.modeling.annotation>1.0.7</version.modeling.annotation>
+		<version.modeling.annotation.processor>1.0.7</version.modeling.annotation.processor>
+		<modeling-sdk.modelproc.version>1.0.4</modeling-sdk.modelproc.version>
+ </properties>
+ <dependencyManagement>
+		<dependencies>
+			<!-- here we specify what version of Service Framework we want to use. 
+				All modules will be imported -->
+			<dependency>
+				<groupId>com.ericsson.oss.itpf.modeling</groupId>
+				<artifactId>Modeling-BOM</artifactId>
+				<version>${version.ModelingServiceBOM}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>			
+		</dependencies>
+		</dependencyManagement>
+</project>

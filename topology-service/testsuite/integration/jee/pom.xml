@@ -1,0 +1,529 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ericsson.oss.services.topologyservice</groupId>
+		<artifactId>topology-service-testsuite-integration</artifactId>
+		<version>1.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>topology-service-testsuite-integration-jee</artifactId>
+	<name>[${project.parent.artifactId}] TestSuite Integration JEE</name>
+
+	<dependencies>
+		<!-- Project Dependencies -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>topology-service-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>topology-service-ejb</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>topology-service-war</artifactId>
+			<type>war</type>
+			<version>${project.version}</version>						
+		</dependency>
+
+		<!-- DPS Dependencies -->
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.datalayer.dps</groupId>
+			<artifactId>dps-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- software framework dependencies -->
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.sdk</groupId>
+			<artifactId>sdk-core-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ericsson.oss.itpf.sdk</groupId>
+			<artifactId>sdk-tracing</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Arquillian Dependencies -->
+		<dependency>
+			<groupId>org.jboss.arquillian.protocol</groupId>
+			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec</groupId>
+			<artifactId>jboss-javaee-6.0</artifactId>
+			<version>1.0.0.Final</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-api-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Dependencies for arquillian-suite-extension -->
+		<dependency>
+			<groupId>org.jboss.arquillian.core</groupId>
+			<artifactId>arquillian-core-spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-container-spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-container-test-spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-container-test-impl-base</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.3.4.Final</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+
+		<profile>
+			<id>skip_jee</id>
+			<activation>
+				<property>
+					<name>ts.skip.integration.jee</name>
+				</property>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>setup_integration</id>
+			<activation>
+				<property>
+					<name>ts</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-models</id>
+								<phase>process-test-resources</phase>   <!--process-test-resources comes before process-test-classes -->
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+
+										<!-- OSS TOP Models -->
+										<artifactItem>
+											<groupId>com.ericsson.oss.services</groupId>
+											<artifactId>OssTop-model</artifactId>
+											<version>${version.OssTop.models}</version>
+											<type>jar</type>
+											<outputDirectory>${project.build.directory}/test-model</outputDirectory>
+										</artifactItem>
+
+										<!--ERBSNetwork Models -->
+										<artifactItem>
+											<groupId>com.ericsson.oss.services.erbs.nrm.native</groupId>
+											<artifactId>ERBSNetworkResourceModels-jar</artifactId>
+											<version>${version.ERBSNetworkResource.models}</version>
+											<type>jar</type>
+											<outputDirectory>${project.build.directory}/test-model</outputDirectory>
+										</artifactItem>
+
+										<!--CPPNetwork Models -->
+										<artifactItem>
+											<groupId>com.ericsson.oss.services.cpp.nrm.native</groupId>
+											<artifactId>CPPNetworkResourceModels-jar</artifactId>
+											<version>${version.CPPNetworkResource.models}</version>
+											<type>jar</type>
+											<outputDirectory>${project.build.directory}/test-model</outputDirectory>
+										</artifactItem>
+
+									</artifactItems>
+								</configuration>
+							</execution>
+
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.ericsson.oss.itpf.modeling</groupId>
+						<artifactId>model-deployment-jar</artifactId>
+						<version>${version.model.deployment.tool}</version>
+						<dependencies>
+							<dependency>
+								<groupId>com.ericsson.oss.itpf.modeling</groupId>
+								<artifactId>default-mdt-plugins-jar</artifactId>
+								<version>${version.model.deployment.tool}</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<jarFiles>
+								<jarFile>${project.build.directory}/test-model/OssTop-model-${version.OssTop.models}.jar</jarFile>
+								<jarFile>${project.build.directory}/test-model/ERBSNetworkResourceModels-jar-${version.ERBSNetworkResource.models}.jar</jarFile>
+								<jarFile>${project.build.directory}/test-model/CPPNetworkResourceModels-jar-${version.CPPNetworkResource.models}.jar</jarFile>
+							</jarFiles>
+							<modelRoot>${project.build.directory}/deployed-model</modelRoot>
+							<xmlRepo>${project.build.directory}/deployed-model/modelRepo.xml</xmlRepo>
+						</configuration>
+						<executions>
+							<execution>
+								<id>deploy-all-models</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>model-deploy</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.ericsson.oss.itpf.datalayer.dps</groupId>
+						<artifactId>dps-maven-plugin</artifactId>
+						<version>${version.dps.maven.plugin}</version>
+						<configuration>
+							<workDir>${project.build.directory}/dps_work</workDir>
+							<outputDir>${generated.dps.ear.dir}</outputDir>
+							<modelDir>${project.build.directory}/deployed-model</modelDir>
+							<modelRepoXmlPath>${project.build.directory}/deployed-model/modelRepo.xml</modelRepoXmlPath>
+							<jBossDir>${jboss.home}</jBossDir>   <!-- this may need to point to jboss unpacked during the build -->
+							<dbHostName>${versant.db.host}</dbHostName>
+							<dbName>${versant.db.name}</dbName>
+							<schemaUpdate>true</schemaUpdate>
+							<useMockDelegate>true</useMockDelegate>
+						</configuration>
+						<executions>
+							<execution>
+								<id>run-dps-maven-plugin</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>build-dps</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- JBOSS - MANAGED - TEST PROFILE -->
+		<profile>
+			<id>jboss_managed</id>
+
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>ts</name>
+				</property>
+			</activation>
+
+			<properties>
+				<jboss.home>${env.JBOSS_HOME}</jboss.home>
+				<generated.dps.ear.dir>${env.JBOSS_HOME}/standalone/deployments</generated.dps.ear.dir>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.jboss.as</groupId>
+					<artifactId>jboss-as-arquillian-container-managed</artifactId>
+					<version>${version.jboss.as.arquillian}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.4</version>
+						<executions>
+							<execution>
+								<id>unpack-modules</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<ignoreDirect>false</ignoreDirect>
+									<artifactItems>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12</version>
+						<configuration>
+							<systemPropertyVariables>
+								<jboss.home>${jboss.home}</jboss.home>
+								<arquillian.launch>jboss_managed</arquillian.launch>
+								<ericsson-model-service-root>src/test/resources/model</ericsson-model-service-root>
+								<modelRoot>${project.build.directory}/deployed-model</modelRoot>
+								<xmlRepo>${project.build.directory}/deployed-model/modelRepo.xml</xmlRepo>
+							</systemPropertyVariables>
+							<excludes>
+								<!-- exclude glassfish specific tests -->
+								<exclude>**/glassfish/*</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+
+		<!-- JBOSS - MANAGED LOCAL - TEST PROFILE -->
+		<!-- JBOSS will be downloaded and unpacked in the "target/" directory -->
+		<profile>
+			<id>jboss_managed_local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+
+			<properties>
+				<jboss.home>${project.build.directory}/${version.jboss.as}</jboss.home>
+				<generated.dps.ear.dir>${jboss.home}/standalone/deployments</generated.dps.ear.dir>
+			</properties>
+
+			<dependencies>
+				<dependency>
+					<groupId>org.jboss.as</groupId>
+					<artifactId>jboss-as-arquillian-container-managed</artifactId>
+					<version>${version.jboss.as.arquillian}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>2.4</version>
+						<executions>
+							<execution>
+								<id>unpack-modules</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<ignoreDirect>false</ignoreDirect>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.jboss.as</groupId>
+											<artifactId>jboss-as-dist</artifactId>
+											<version>${version.jboss.as.dist}</version>
+											<type>zip</type>
+											<overWrite>false</overWrite>
+											<outputDirectory>target/</outputDirectory>
+										</artifactItem>
+										<!-- SFW bundle is needed to make use of SWF capabilities -->
+										<artifactItem>
+											<groupId>com.ericsson.oss.itpf.sdk</groupId>
+											<artifactId>service-framework-bundle</artifactId>
+											<version>${version.service.framework.bundle}</version>
+											<type>zip</type>
+											<overWrite>true</overWrite>
+											<outputDirectory>${jboss.home}/modules/system/layers/base</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.ericsson.oss.itpf.modeling</groupId>
+											<artifactId>model-service-module</artifactId>
+											<classifier>package</classifier>
+											<type>zip</type>
+											<overWrite>false</overWrite>
+											<outputDirectory>${jboss.home}/modules/system/layers/base</outputDirectory>
+										</artifactItem>
+										<artifactItem>
+											<groupId>com.ericsson.oss.itpf.modeling</groupId>
+											<artifactId>model-service-api-module</artifactId>
+											<version>${version.model.service.api}</version>
+											<classifier>package</classifier>
+											<type>zip</type>
+											<overWrite>false</overWrite>
+											<outputDirectory>${jboss.home}/modules/system/layers/base</outputDirectory>
+										</artifactItem>
+
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-standalone-full-xml</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${jboss.home}/standalone/configuration/</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/test/resources</directory>
+											<include>standalone-full.xml</include>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.12</version>
+						<configuration>
+							<systemPropertyVariables>
+								<jboss.home>${jboss.home}</jboss.home>
+								<arquillian.launch>jboss_managed</arquillian.launch>
+								<modelRoot>${project.build.directory}/deployed-model</modelRoot>
+								<xmlRepo>${project.build.directory}/deployed-model/modelRepo.xml</xmlRepo>
+							</systemPropertyVariables>
+							<excludes>
+								<exclude>**/glassfish/*</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<!-- JBOSS - REMOTE - TEST PROFILE -->
+
+		<profile>
+			<id>jboss_remote</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jboss.home>${env.JBOSS_HOME}</jboss.home>
+				<generated.dps.ear.dir>${env.JBOSS_HOME}/standalone/deployments</generated.dps.ear.dir>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.jboss.as</groupId>
+					<artifactId>jboss-as-arquillian-container-remote</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.16</version>
+						<configuration>
+							<systemPropertyVariables>
+								<arquillian.launch>jboss_remote</arquillian.launch>
+							</systemPropertyVariables>
+							<parallel>none</parallel>
+							<excludes>
+								exclude glassfish
+								specific tests
+								<exclude>**/glassfish/*</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[2.4,)</versionRange>
+										<goals>
+											<goal>analyze-dep-mgt</goal>
+											<goal>copy-dependencies</goal>
+											<goal>unpack</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.ericsson.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.1,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.ericsson.maven.plugins</groupId>
+										<artifactId>rstate-maven-plugin</artifactId>
+										<versionRange>[1.0,)</versionRange>
+										<goals>
+											<goal>rstate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

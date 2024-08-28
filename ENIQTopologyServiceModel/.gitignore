@@ -1,0 +1,22 @@
+#compiled source #
+*.class
+*.pyc
+
+# Eclipse files
+.project
+.classpath
+.settings
+.pydevproject
+
+# Maven build files
+target
+reports
+**/target
+# PMD
+.pmd
+
+# Merge files
+*.orig
+
+# backup files
+*.*~

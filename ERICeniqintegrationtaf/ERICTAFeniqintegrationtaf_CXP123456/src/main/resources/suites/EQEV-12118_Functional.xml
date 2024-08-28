@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="EQEV-12118_Functional">
+	<test name="EQEV-12118_Functional">
+		<classes>
+			<class name="com.ericsson.sut.test.cases.ComEricssonOssServices_FunctionalTest" />
+		</classes>
+	</test>
+</suite>

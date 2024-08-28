@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><mo fdn="SubNetwork=ONRM_ROOT_MO_R,MeContext=TEST-ERBSNEW" mimName="ERBS_NODE_MODEL" lastModified="1323853821481">
+<attr name="MeContextId">TEST-ERBSNEW</attr>
+<attr name="userLabel">TEST-ERBSNEW</attr>
+<attr name="neMIMversion">vC.1.110</attr>
+<attr name="timestampOfChange">2011-12-14 09:10:21.481</attr>
+<attr name="swVersion">_</attr>
+<attr name="siteRef">SubNetwork=ONRM_ROOT_MO_R,Site=Site_LMI</attr>
+<attr name="nodeVersion">L12.1</attr>
+</mo>

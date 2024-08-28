@@ -1,0 +1,15 @@
+# InteliJ files #
+workspace.xml
+.idea/
+*.iml
+
+.settings/
+.classpath
+.project
+
+# ignore every target
+target/
+
+# ignore jar
+*.jar
+*.bak

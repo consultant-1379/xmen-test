@@ -1,0 +1,6 @@
+string,args,STDOUT,STDERR,EXITCODE,timeout,host
+EQEV-12118_Func_1_Step1,helloworld.txt,,,,,sc1
+EQEV-12118_Func_1_Step2,liamdir,,,,,sc1
+EQEV-12118_Func_1_Step3,liam.txt,,,,,sc1
+EQEV-12118_Func_1_Step4,/root/config.properties,,,,,sc1
+EQEV-12118_Func_1_Step5,/root/config.properties,FilePath=,,,,sc1

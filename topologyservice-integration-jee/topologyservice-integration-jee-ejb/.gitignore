@@ -1,0 +1,11 @@
+/.settings
+/.classpath
+/.project
+/target
+*.orig
+*.versionsBackup
+
+# InteliJ files #
+workspace.xml
+.idea/
+*.iml
